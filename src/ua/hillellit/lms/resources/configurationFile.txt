@@ -1,0 +1,4 @@
+FILE: my_log
+LEVEL: DEBUG
+MAX-SIZE: 1976
+FORMAT: txt
