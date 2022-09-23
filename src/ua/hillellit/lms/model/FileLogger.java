@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 import java.time.LocalTime;
 import ua.hillellit.lms.exceptions.FileMaxSizeReachedException;
 
-public class FileLogger implements Logable {
+public class FileLogger{
 
   public FileLogger(FileLoggerConfiguration configuration) {
     this.configuration = configuration;
@@ -22,7 +22,6 @@ public class FileLogger implements Logable {
 
   long currentSize;
 
-  @Override
   public void log(String message) throws IOException {
     Path path = Paths.get(configuration.getDestinationFile() + "." + configuration.getFileFormat());
 
@@ -36,7 +35,7 @@ public class FileLogger implements Logable {
     catch (IOException e) {
       throw new RuntimeException(e);
     }
-    switch (configuration.currentLoggingLevel) {
+    switch (configuration.getCurrentLoggingLevel()) {
       case DEBUG:
         try {
           debug(message);

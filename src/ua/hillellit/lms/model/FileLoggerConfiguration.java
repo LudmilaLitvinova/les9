@@ -2,9 +2,10 @@ package ua.hillellit.lms.model;
 
 import java.io.Serializable;
 
-public class FileLoggerConfiguration extends LoggerConfiguration implements Serializable {
+public class FileLoggerConfiguration implements Serializable {
 
   private String destinationFile;
+ private LoggingLevel currentLoggingLevel;
   private int maxSizeFile;
   private String fileFormat;
 
@@ -12,7 +13,7 @@ public class FileLoggerConfiguration extends LoggerConfiguration implements Seri
       int maxSizeFile, String fileFormat) {
 
     this.destinationFile = destinationFile;
-    super.currentLoggingLevel = currentLoggingLevel;
+    this.currentLoggingLevel = currentLoggingLevel;
     this.maxSizeFile = maxSizeFile;
     this.fileFormat = fileFormat;
   }
