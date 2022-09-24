@@ -13,11 +13,12 @@ import java.nio.file.Paths;
 import java.time.LocalTime;
 import ua.hillellit.lms.exceptions.FileMaxSizeReachedException;
 
-public class FileLogger{
+public class FileLogger {
 
   public FileLogger(FileLoggerConfiguration configuration) {
     this.configuration = configuration;
   }
+
   private FileLoggerConfiguration configuration;
 
   long currentSize;
@@ -28,17 +29,18 @@ public class FileLogger{
     try {
       currentSize = Files.size(path);
 
-    }catch (NoSuchFileException e) {
-      File file = new File(configuration.getDestinationFile() + "." + configuration.getFileFormat());
+    } catch (NoSuchFileException e) {
+      File file = new File(
+          configuration.getDestinationFile() + "." + configuration.getFileFormat());
       file.createNewFile();
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       throw new RuntimeException(e);
     }
     switch (configuration.getCurrentLoggingLevel()) {
       case DEBUG:
         try {
           debug(message);
+          info(message);
         } catch (FileMaxSizeReachedException e) {
           throw new RuntimeException(e);
         }

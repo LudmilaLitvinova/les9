@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class FileLoggerConfiguration implements Serializable {
 
   private String destinationFile;
- private LoggingLevel currentLoggingLevel;
+  private LoggingLevel currentLoggingLevel;
   private int maxSizeFile;
   private String fileFormat;
 
