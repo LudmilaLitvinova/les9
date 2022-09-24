@@ -18,6 +18,7 @@ public class FileLogger implements Logable {
   public FileLogger(FileLoggerConfiguration configuration) {
     this.configuration = configuration;
   }
+
   private FileLoggerConfiguration configuration;
 
   long currentSize;
@@ -29,17 +30,18 @@ public class FileLogger implements Logable {
     try {
       currentSize = Files.size(path);
 
-    }catch (NoSuchFileException e) {
-      File file = new File(configuration.getDestinationFile() + "." + configuration.getFileFormat());
+    } catch (NoSuchFileException e) {
+      File file = new File(
+          configuration.getDestinationFile() + "." + configuration.getFileFormat());
       file.createNewFile();
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       throw new RuntimeException(e);
     }
     switch (configuration.currentLoggingLevel) {
       case DEBUG:
         try {
           debug(message);
+          info(message);
         } catch (FileMaxSizeReachedException e) {
           throw new RuntimeException(e);
         }

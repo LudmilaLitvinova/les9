@@ -3,26 +3,24 @@ package ua.hillellit.lms.model;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Properties;
 
 public class FileLoggerConfigurationLoader {
 
   public FileLoggerConfiguration load(String path) {
-    FileLoggerConfiguration flc;
-    try (InputStream is = new FileInputStream(path)) {
-      byte[] res = new byte[is.available()];
-      int s;
-      int i = 0;
-      while ((s = is.read()) >= 0) {
-        res[i++] = (byte) s;
-      }
-      String[] input = (new String(res)).split("\n");
+    FileLoggerConfiguration flc = null;
+    try (InputStream input = new FileInputStream(path)) {
 
-      flc = new FileLoggerConfiguration(input[0].split(": ")[1].replaceAll("\\p{Cntrl}", ""),
-          LoggingLevel.valueOf(input[1].split(": ")[1].replaceAll("\\p{Cntrl}", "")),
-          Integer.parseInt(input[2].split(": ")[1].replaceAll("\\p{Cntrl}", "")),
-          input[3].split(": ")[1].replaceAll("\\p{Cntrl}", ""));
-    } catch (IOException e) {
-      throw new RuntimeException(e);
+      Properties prop = new Properties();
+
+      prop.load(input);
+
+      flc = new FileLoggerConfiguration(prop.getProperty("FILE"),
+          LoggingLevel.valueOf(prop.getProperty("LEVEL")),
+          Integer.parseInt(prop.getProperty("MAX-SIZE")),
+          prop.getProperty("FORMAT"));
+    } catch (IOException io) {
+      io.printStackTrace();
     }
     return flc;
   }

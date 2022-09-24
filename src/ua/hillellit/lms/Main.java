@@ -8,7 +8,8 @@ public class Main {
 
   public static void main(String[] args) {
     FileLoggerConfigurationLoader flcl = new FileLoggerConfigurationLoader();
-    FileLogger fl = new FileLogger(flcl.load("src\\ua\\hillellit\\lms\\resources\\configurationFile.txt"));
+    FileLogger fl = new FileLogger(
+        flcl.load("src\\ua\\hillellit\\lms\\resources\\configuration.properties"));
 
     try {
       fl.log("Привіт! Тут має бути текст про логування");
