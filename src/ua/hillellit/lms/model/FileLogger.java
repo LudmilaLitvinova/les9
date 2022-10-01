@@ -23,7 +23,7 @@ public class FileLogger {
 
   long currentSize;
 
-  public void log(String message) throws IOException {
+  private boolean configLog() throws IOException {
     Path path = Paths.get(configuration.getDestinationFile() + "." + configuration.getFileFormat());
 
     try {
@@ -36,38 +36,32 @@ public class FileLogger {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+
     switch (configuration.getCurrentLoggingLevel()) {
       case DEBUG:
-        try {
-          debug(message);
-          info(message);
-        } catch (FileMaxSizeReachedException e) {
-          throw new RuntimeException(e);
-        }
-        break;
-      case INFO:
-        try {
-          info(message);
-        } catch (FileMaxSizeReachedException e) {
-          throw new RuntimeException(e);
-        }
-        break;
+        return true;
+      default:
+        return false;
     }
   }
 
-  private void debug(String message) throws FileMaxSizeReachedException {
-    File file = new File(configuration.getDestinationFile() + "." + configuration.getFileFormat());
-    try (BufferedWriter bufferWriter = new BufferedWriter(new FileWriter(file, true))) {
-      String text = "[" + LocalTime.now().toString() + "][DEBUG] Повідомлення: [" + message + "]\n";
-      byte[] textSize = text.getBytes("UTF-8");
-      checkFileSize(currentSize, textSize.length);
-      bufferWriter.write(text);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
+  public void debug(String message) throws FileMaxSizeReachedException, IOException {
+    if (configLog()) {
+      File file = new File(
+          configuration.getDestinationFile() + "." + configuration.getFileFormat());
+      try (BufferedWriter bufferWriter = new BufferedWriter(new FileWriter(file, true))) {
+        String text =
+            "[" + LocalTime.now().toString() + "][DEBUG] Повідомлення: [" + message + "]\n";
+        byte[] textSize = text.getBytes("UTF-8");
+        checkFileSize(currentSize, textSize.length);
+        bufferWriter.write(text);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
     }
   }
 
-  private void info(String message) throws FileMaxSizeReachedException {
+  public void info(String message) throws FileMaxSizeReachedException {
     File file = new File(configuration.getDestinationFile() + "." + configuration.getFileFormat());
     try (BufferedWriter bufferWriter = new BufferedWriter(new FileWriter(file, true))) {
       String text = "[" + LocalTime.now().toString() + "][INFO] Повідомлення: [" + message + "]\n";
